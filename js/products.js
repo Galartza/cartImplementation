@@ -105,6 +105,34 @@ function calculateTotal() {
     return cart.reduce((total, product) => total + product.price, 0);
 }
 
+
+
+
+// Funcion para generar mensaje de Whatsapp
+function sendWhatsApp() {
+    if (cart.length === 0) {
+        alert("El carrito está vacío. Añade productos antes de enviar el mensaje.");
+        return;
+    }
+
+    // Generar el mensaje con los productos del carrito y total
+    let message = "Hola, estoy interesado en los siguientes productos:\n\n";
+    cart.forEach(product => {
+        message += `• ${product.name} - $${product.price}\n`;
+    });
+    message += `\n*TOTAL: $${calculateTotal()}*`;
+
+    // Codificar el mensaje para la URL de WhatsApp (eliminar espacios y caracteres especiales)
+    const encodedMessage = encodeURIComponent(message);
+
+    // Número de teléfono de WhatsApp (reemplazar con el número real)
+    const phoneNumber = "3562510523"; // Reemplaza con el número real
+
+    // Redireccionar a WhatsApp con el mensaje
+    window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`, '_blank');
+}
+
+// Añadir evento al botón de WhatsApp
 // Actualizamos la función updateCart para usar calculateTotal
 function updateCart() {
     const cartContainer = document.getElementById("cart-container");
@@ -122,6 +150,14 @@ function updateCart() {
         cartContainer.appendChild(cartItem);
     });
     totalElement.textContent = `Total: $${total}`;
+
+    // Mostrar el botón de WhatsApp solo si hay productos en el carrito
+    const whatsappButton = document.getElementById("whatsapp-button");
+    if (cart.length > 0) {
+        whatsappButton.style.display = "block"; // Mostrar el botón
+    } else {
+        whatsappButton.style.display = "none"; // Ocultar el botón
+    }
 }
 
 
